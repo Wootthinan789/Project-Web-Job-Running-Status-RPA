@@ -14,13 +14,13 @@
 
       <!-- ปุ่มเพิ่มเติมสำหรับ Virtual Machine -->
       <div v-if="showVMOptions" class="vm-options">
-        <button class="action-button-list">
+        <button class="action-button-list" @click="updateCenterText('Nutanix')">
           Nutanix
         </button>
-        <button class="action-button-list">
+        <button class="action-button-list" @click="updateCenterText('VMware')">
           VMware
         </button>
-        <button class="action-button-list">
+        <button class="action-button-list" @click="updateCenterText('VMware New')">
           VMware New
         </button>
       </div>
@@ -34,13 +34,13 @@
 
       <!-- ปุ่มเพิ่มเติมสำหรับ Run Code -->
       <div v-if="showRunCodeOptions" class="run-code-options">
-        <button class="action-button-list">
+        <button class="action-button-list" @click="updateCenterText('Run Script')">
           Run Script
         </button>
-        <button class="action-button-list">
+        <button class="action-button-list" @click="updateCenterText('Debug Code')">
           Debug Code
         </button>
-        <button class="action-button-list">
+        <button class="action-button-list" @click="updateCenterText('Compile')">
           Compile
         </button>
       </div>
@@ -54,12 +54,12 @@
           {{ currentDate }} {{ currentTime }}
         </div>
 
-          <!-- ข้อความ Nutarnix ตรงกลาง -->
+        <!-- ข้อความ Nutanix ตรงกลาง (จะเปลี่ยนตามการเลือกปุ่ม) -->
         <div class="center-text">
-          Nutanix
+          {{ selectedOption }}
         </div>
-        
-        <!-- Dropdown User ที่ปรับแต่งใหม่ -->
+
+        <!-- Dropdown User -->
         <div class="user-dropdown" @click="toggleDropdown">
           <div class="user-info">
             <img class="user-icon" src="@/assets/imgs/user.png" alt="User" />
@@ -81,10 +81,17 @@
 
       <!-- Grid ด้านล่างของ Grid ขวา -->
       <div class="bottom-grid">
+        <div class="column-header">
+          <div class="header-item">Name</div>
+          <div class="header-item">IP Addresses</div>
+          <div class="header-item">Status VM</div>
+          <div class="header-item">Status Run</div>
+        </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -96,6 +103,7 @@ export default {
       isDropdownOpen: false, // สถานะของ dropdown (เปิด/ปิด)
       showVMOptions: false,  // สถานะเพื่อแสดง/ซ่อนปุ่มเพิ่มเติมของ Virtual Machine
       showRunCodeOptions: false, // สถานะเพื่อแสดง/ซ่อนปุ่มเพิ่มเติมของ Run Code
+      selectedOption: 'Nutanix', // ค่าเริ่มต้นของข้อความที่จะแสดงตรงกลาง
     };
   },
   mounted() {
@@ -128,6 +136,9 @@ export default {
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen; // สลับสถานะ dropdown
     },
+    updateCenterText(option) {
+      this.selectedOption = option; // อัปเดตข้อความตรงกลางตามตัวเลือกที่ถูกกด
+    },
     handleClickOutside(event) {
       // ถ้า target ของการคลิกไม่ใช่ user dropdown และ dropdown เปิดอยู่ ให้ปิด dropdown
       const dropdown = this.$el.querySelector('.user-dropdown');
@@ -137,8 +148,8 @@ export default {
     }
   },
 };
-</script>
 
+</script>
 
 <style scoped>
 .home-container {
@@ -270,6 +281,30 @@ export default {
   border-radius: 30px;
   margin: 10px;
   flex: 1;
+}
+
+.column-header {
+  display: flex;
+  width: auto;
+  justify-content: space-between;
+  background-color: #ffffff;
+  padding: 5px 20px;
+  border-radius: 30px;
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+}
+
+.header-item {
+  flex: 1;
+  font-size: 16px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  text-align: center;
+  color: #414141;
+  padding: 10px 0;
+}
+
+.header-item:not(:last-child) {
+  margin-right: 20px; /* ระยะห่างระหว่างคอลลัมม์ */
 }
 
 .dashboard-title {
